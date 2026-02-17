@@ -2,14 +2,14 @@ import { useRef } from "react";
 import mainLogo from "../assets/logo.jpg";
 import Modal from "./Modal";
 
-export default function MainHeader({ orders, setOrders }) {
+export default function MainHeader({ items, setItems }) {
   const cartModal = useRef();
   const checkoutModal = useRef();
 
   let totalPrice = 0;
 
-  for (let order of orders) {
-    const sum = Number(order.price) * order.count;
+  for (let item of items) {
+    const sum = Number(item.price) * item.count;
 
     totalPrice += sum;
   }
@@ -28,25 +28,49 @@ export default function MainHeader({ orders, setOrders }) {
     checkoutModal.current.close();
   }
 
-  function addOrderCount(id) {
-    setOrders((prevOrders) => {
-      return prevOrders.map((order) => {
-        if (order.id === id) {
-          return { ...order, count: order.count + 1 };
+  function addItemCount(id) {
+    setItems((prevItems) => {
+      return prevItems.map((item) => {
+        if (item.id === id) {
+          return { ...item, count: item.count + 1 };
         }
-        return { ...order };
+        return { ...item };
       });
     });
   }
 
-  function deleteOrderCount(id) {
-    setOrders((prevOrders) => {
-      return prevOrders.map((order) => {
-        if (order.id === id) {
-          return { ...order, count: order.count === 0 ? 0 : order.count - 1 };
+  function deleteItemCount(id) {
+    setItems((prevItems) => {
+      return prevItems.map((item) => {
+        if (item.id === id) {
+          return { ...item, count: item.count === 0 ? 0 : item.count - 1 };
         }
-        return { ...order };
+        return { ...item };
       });
+    });
+  }
+
+  async function handleSubmit(event) {
+    event.preventDefault();
+
+    const fd = new FormData(event.target);
+
+    const name = fd.get("name");
+    const email = fd.get("email");
+    const street = fd.get("street");
+    const postalCode = fd.get("postalCode");
+    const city = fd.get("city");
+
+    const order = { customer: { name, email, street, postalCode, city }, items };
+
+    console.log(order);
+
+    await fetch("http://localhost:3000/orders", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ order }),
     });
   }
 
@@ -56,16 +80,16 @@ export default function MainHeader({ orders, setOrders }) {
         <div className="cart">
           <h2>Your Cart</h2>
           <ul>
-            {orders.map((order) => (
-              <li key={order.id}>
+            {items.map((item) => (
+              <li key={item.id}>
                 <div className="cart-item">
                   <p>
-                    {order.name} - {order.count} x ${order.price}
+                    {item.name} - {item.count} x ${item.price}
                   </p>
                   <p className="cart-item-actions">
-                    <button onClick={() => deleteOrderCount(order.id)}>-</button>
-                    {order.count}
-                    <button onClick={() => addOrderCount(order.id)}>+</button>
+                    <button onClick={() => deleteItemCount(item.id)}>-</button>
+                    {item.count}
+                    <button onClick={() => addItemCount(item.id)}>+</button>
                   </p>
                 </div>
               </li>
@@ -86,27 +110,27 @@ export default function MainHeader({ orders, setOrders }) {
         <div className="control">
           <h2>Checkout</h2>
           <p>Total Amount: ${totalPrice.toFixed(2)}</p>
-          <form action="">
+          <form onSubmit={handleSubmit}>
             <p className="control-row">
               <label htmlFor="name">Full Name</label>
-              <input type="text" id="name" />
+              <input type="text" id="name" name="name" />
             </p>
             <p className="control-row">
               <label htmlFor="email">E-mail Address</label>
-              <input type="text" id="email" />
+              <input type="text" id="email" name="email" />
             </p>
             <p className="control-row">
               <label htmlFor="street">Street</label>
-              <input type="text" id="street" />
+              <input type="text" id="street" name="street" />
             </p>
             <div className="control-row-box">
               <p className="control-row">
                 <label htmlFor="postalCode">Postal Code</label>
-                <input type="text" id="postalCode" />
+                <input type="text" id="postalCode" name="postalCode" />
               </p>
               <p className="control-row">
                 <label htmlFor="city">City</label>
-                <input type="text" id="city" />
+                <input type="text" id="city" name="city" />
               </p>
             </div>
             <p className="cart-action-buttons">
@@ -124,7 +148,7 @@ export default function MainHeader({ orders, setOrders }) {
       </div>
 
       <button className="text-button" onClick={showCartModal}>
-        Cart ({orders.length})
+        Cart ({items.length})
       </button>
     </header>
   );

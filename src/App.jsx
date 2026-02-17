@@ -15,8 +15,6 @@ function App() {
     }
 
     getMeals();
-
-    // const meals = getMeals(); setMeals(meals); 는 왜 안되는가
   }, []);
 
   function addOrder(id) {
@@ -42,7 +40,7 @@ function App() {
 
   return (
     <>
-      <MainHeader orders={orders} setOrders={setOrders} />
+      <MainHeader items={orders} setItems={setOrders} />
       <Meals meals={meals} addOrder={addOrder} />
     </>
   );
