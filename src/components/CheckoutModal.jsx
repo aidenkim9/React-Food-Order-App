@@ -37,7 +37,8 @@ export default function CheckoutModal({ closeModal }) {
 
       closeModal();
     } catch (err) {
-      setSubmitError(err.messge || "Failed to submit order data.");
+      setSubmitError(err.message || "Failed to submit order data.");
+    } finally {
       setSubmitting(false);
     }
   }

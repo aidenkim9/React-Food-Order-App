@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { FoodOrderContext } from "../store/food-order-context";
 
 export default function CartModal({ closeModal, showModal, items }) {
-  const { totalPrice, addItemCount, deleteItemCount } = useContext(FoodOrderContext);
+  const { totalPrice, addItem, deleteItem } = useContext(FoodOrderContext);
   return (
     <div className="cart">
       <h2>Your Cart</h2>
@@ -14,9 +14,9 @@ export default function CartModal({ closeModal, showModal, items }) {
                 {item.name} - {item.count} x ${item.price}
               </p>
               <p className="cart-item-actions">
-                <button onClick={() => deleteItemCount(item.id)}>-</button>
+                <button onClick={() => deleteItem(item.id)}>-</button>
                 {item.count}
-                <button onClick={() => addItemCount(item.id)}>+</button>
+                <button onClick={() => addItem(item)}>+</button>
               </p>
             </div>
           </li>

@@ -11,7 +11,7 @@ export default function MealItem({ meal }) {
         <div>
           <p className="meal-item-price">${meal.price}</p>
           <p className="meal-item-description">{meal.description}</p>
-          <button className="meal-item-actions button" onClick={() => addItem(meal.id)}>
+          <button className="meal-item-actions button" onClick={() => addItem(meal)}>
             Add to Cart
           </button>
         </div>

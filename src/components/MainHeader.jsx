@@ -7,8 +7,13 @@ import CheckoutModal from "./CheckoutModal";
 
 export default function MainHeader() {
   const { items } = useContext(FoodOrderContext);
+
   const cartModal = useRef();
   const checkoutModal = useRef();
+
+  const totalItems = items.reduce((totalCount, item) => {
+    return (totalCount += item.count);
+  }, 0);
 
   function showModal(modal) {
     modal.current.showModal();
@@ -37,7 +42,7 @@ export default function MainHeader() {
         <h1>REACTFOOD</h1>
       </div>
       <button className="text-button" onClick={() => showModal(cartModal)}>
-        Cart ({items.length})
+        Cart ({totalItems})
       </button>
     </header>
   );
