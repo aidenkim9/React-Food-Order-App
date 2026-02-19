@@ -1,4 +1,8 @@
-export default function MealItem({ meal, addOrder }) {
+import { useContext } from "react";
+import { FoodOrderContext } from "../store/food-order-context";
+
+export default function MealItem({ meal }) {
+  const { addItem } = useContext(FoodOrderContext);
   return (
     <div className="meal-item">
       <article>
@@ -7,7 +11,7 @@ export default function MealItem({ meal, addOrder }) {
         <div>
           <p className="meal-item-price">${meal.price}</p>
           <p className="meal-item-description">{meal.description}</p>
-          <button className="meal-item-actions button" onClick={() => addOrder(meal.id)}>
+          <button className="meal-item-actions button" onClick={() => addItem(meal.id)}>
             Add to Cart
           </button>
         </div>
